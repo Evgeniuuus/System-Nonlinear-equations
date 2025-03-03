@@ -4,7 +4,12 @@
 import numpy as np
 
 
+def phi_1(x, y):
+    return np.sqrt(y / 3)
 
+
+def phi_2(x, y):
+    return np.sqrt(4 - x ** 2)
 
 
 def EasyGauss(a: np.array):
