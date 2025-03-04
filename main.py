@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
-import sympy as sp
 from functions import *
-from random import randint
+#from random import randint
 import subprocess
 
 F_x_y_1 = "3*x^2 - y = 0"
@@ -38,7 +37,6 @@ plt.show()
 print('\n-----------------------Метод простой итерации----------------------')
 
 epsilon = np.double(input("Введите Эпсилон: "))
-#epsilon = 0.001
 
 x_0, y_0 = 1, 1
 switch = True
@@ -68,61 +66,39 @@ if not switch:
 
 print("\n---------------------------Метод Ньютона----------------------------")
 
-x, y = sp.symbols('x y')
+epsilon = np.double(input("Введите Эпсилон: "))
 
-F_x_y_1 = 3 * x ** 2 - y
-F_x_y_2 = x ** 2 + y ** 2 - 4
+x_0, y_0 = 1, 1
 
-# Частные производные (матрица Якоби)
-J = np.array([[sp.diff(F_x_y_1, x), sp.diff(F_x_y_1, y)],
-              [sp.diff(F_x_y_2, x), sp.diff(F_x_y_2, y)]])
+k = 0
 
+while True:
+    F_k = F(x_0, y_0)
+    J_k = Jacobian(x_0, y_0)
 
-# Функция для вычисления значений системы
-def F(x_val, y_val):
-    return np.array([F_x_y_1.subs({x: x_val, y: y_val}),
-                     F_x_y_2.subs({x: x_val, y: y_val})], dtype=float)
+    try:
+        z_k = np.linalg.solve(J_k, -F_k)  # Она находит вектор решения x для заданного уравнения Ax = b
+    except np.linalg.LinAlgError:
+        print("Якобиан вырожденный, метод не применим")
+        break
 
+    x_k = x_0 + z_k[0]
+    y_k = y_0 + z_k[1]
 
-# Функция для вычисления Якобиана
-def Jacobian(x_val, y_val):
-    return np.array([[J[0, 0].subs({x: x_val, y: y_val}), J[0, 1].subs({x: x_val, y: y_val})],
-                     [J[1, 0].subs({x: x_val, y: y_val}), J[1, 1].subs({x: x_val, y: y_val})]], dtype=float)
+    k += 1
 
+    if np.linalg.norm(z_k) < epsilon:   # Если норма (длина) вектора < epsilon, то ок
+        print(f"Метод Ньютона сошелся через {k} итераций")
+        break
 
-# Метод Ньютона
-def newton_method(x0, y0, epsilon):
-    x_k, y_k = x0, y0
-    k = 0
-    while True:
-        F_k = F(x_k, y_k)
-        J_k = Jacobian(x_k, y_k)
+    if k > 1000:
+        print("Метод не сошелся")
+        switch = False
 
-        try:
-            delta = np.linalg.solve(J_k, -F_k)  # Решение системы линейных уравнений
-        except np.linalg.LinAlgError:
-            print("Якобиан вырожденный, метод не применим")
-            return None
-
-        x_k1, y_k1 = x_k + delta[0], y_k + delta[1]
-        k += 1
-
-        if np.linalg.norm(delta) < epsilon:
-            print(f"Метод Ньютона сошелся через {k} итераций")
-            return x_k1, y_k1
-
-        if k > 1000:
-            print("Метод не сошелся")
-            return None
-
-        x_k, y_k = x_k1, y_k1
+    x_0, y_0 = x_k, y_k
 
 
-epsilon = float(input("Введите Эпсилон: "))
-result = newton_method(1, 1, epsilon)
-
-if result:
-    print(f"Решение: x = {result[0]:.10f}, y = {result[1]:.10f}")
+print(f"Решение: x = {x_0:.10f}, y = {y_0:.10f}")
 
 
 '''

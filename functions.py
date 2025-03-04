@@ -1,9 +1,11 @@
 # Вариант № 3
-# Анатолий 6
+# Анатолий 6 И на лабу 3
 
 import numpy as np
+import sympy as sp
 
 
+# ----------------------Для метода простой итерации---------------------
 def phi_1(x, y):
     return np.sqrt(y / 3)
 
@@ -12,6 +14,27 @@ def phi_2(x, y):
     return np.sqrt(4 - x ** 2)
 
 
+# ---------------------------Для метода Ньютона--------------------------
+x, y = sp.symbols('x y')
+
+F_x_y_1 = 3 * x ** 2 - y
+F_x_y_2 = x ** 2 + y ** 2 - 4
+
+J = np.array([[sp.diff(F_x_y_1, x), sp.diff(F_x_y_1, y)],   # [[6*x -1]
+              [sp.diff(F_x_y_2, x), sp.diff(F_x_y_2, y)]])  #  [2*x 2*y]]
+
+
+def F(x_val, y_val):
+    return np.array([F_x_y_1.subs({x: x_val, y: y_val}),
+                     F_x_y_2.subs({x: x_val, y: y_val})], dtype=float)
+
+
+def Jacobian(x_val, y_val):
+    return np.array([[J[0, 0].subs({x: x_val, y: y_val}), J[0, 1].subs({x: x_val, y: y_val})],
+                     [J[1, 0].subs({x: x_val, y: y_val}), J[1, 1].subs({x: x_val, y: y_val})]], dtype=float)
+
+
+'''
 def EasyGauss(a: np.array):
     def div_row(a: np.array, n: int, divider: float):
         for j in range(len(a[i])):
@@ -77,3 +100,4 @@ def get_answer(a: np.array):
         return answ
     else:
         return []
+'''
