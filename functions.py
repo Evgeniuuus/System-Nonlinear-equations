@@ -44,12 +44,8 @@ def f2(arg1, arg2):
 
 def check(root1, root2, epsilon):
     if abs(f1(root1, root2)) < epsilon and abs(f2(root1, root2)) < epsilon:
-        print(f1(root1, root2))
-        print(f2(root1, root2))
         return "Найден верно."
     else:
-        print(f1(root1, root2))
-        print(f2(root1, root2))
         return "Найден неверно."
 
 
