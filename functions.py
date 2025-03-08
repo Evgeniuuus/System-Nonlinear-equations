@@ -20,8 +20,8 @@ x, y = sp.symbols('x y')
 F_x_y_1 = 3 * x ** 2 - y
 F_x_y_2 = x ** 2 + y ** 2 - 4
 
-J = np.array([[sp.diff(F_x_y_1, x), sp.diff(F_x_y_1, y)],   # [[6*x -1]
-              [sp.diff(F_x_y_2, x), sp.diff(F_x_y_2, y)]])  #  [2*x 2*y]]
+J = np.array([[sp.diff(F_x_y_1, x), sp.diff(F_x_y_1, y)],  # [[6*x -1]
+              [sp.diff(F_x_y_2, x), sp.diff(F_x_y_2, y)]])  # [2*x 2*y]]
 
 
 def F(x_val, y_val):
@@ -32,6 +32,25 @@ def F(x_val, y_val):
 def Jacobian(x_val, y_val):
     return np.array([[J[0, 0].subs({x: x_val, y: y_val}), J[0, 1].subs({x: x_val, y: y_val})],
                      [J[1, 0].subs({x: x_val, y: y_val}), J[1, 1].subs({x: x_val, y: y_val})]], dtype=float)
+
+
+def f1(arg1, arg2):
+    return arg1 ** 2 + arg2 ** 2 - 4
+
+
+def f2(arg1, arg2):
+    return 3 * arg1 ** 2 - arg2
+
+
+def check(root1, root2, epsilon):
+    if abs(f1(root1, root2)) < epsilon and abs(f2(root1, root2)) < epsilon:
+        print(f1(root1, root2))
+        print(f2(root1, root2))
+        return "Найден верно."
+    else:
+        print(f1(root1, root2))
+        print(f2(root1, root2))
+        return "Найден неверно."
 
 
 '''

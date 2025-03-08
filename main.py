@@ -60,9 +60,11 @@ while True:
 
     x_0, y_0 = x_next, y_next
 
-print(f"Решение: x = {x_0:.10f}, y = {y_0:.10f}")
+print(f"Решение: x = {x_next:.10f}, y = {y_next:.10f}")
 if not switch:
     print("Решение ошибочно")
+
+print(check(x_next, y_next, epsilon))
 
 print("\n---------------------------Метод Ньютона----------------------------")
 
@@ -100,6 +102,7 @@ while True:
 
 print(f"Решение: x = {x_0:.10f}, y = {y_0:.10f}")
 
+print(check(x_0, y_0, epsilon))
 
 '''
 n = (3, 3)
